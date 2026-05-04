@@ -22,7 +22,7 @@
   .device {
     background: linear-gradient(160deg, #3b3a5e, #252438);
     border-radius: 36px 36px 48px 48px;
-    padding: 20px 20px 28px;
+    padding: 20px 20px 32px;
     width: 320px;
     box-shadow:
       0 30px 60px #00000080,
@@ -30,18 +30,9 @@
       inset 0 2px 6px #ffffff18,
       inset 0 -4px 8px #00000040;
     position: relative;
-  }
-
-  /* little speaker dots */
-  .device::before {
-    content: '· · · · ·';
-    position: absolute;
-    bottom: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: #4a4870;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   /* ── Screen bezel ── */
@@ -50,18 +41,18 @@
     border-radius: 20px;
     padding: 10px;
     box-shadow: inset 0 4px 12px #00000080, 0 2px 4px #ffffff0a;
+    width: 100%;
   }
 
   /* ── LCD screen ── */
   .screen {
-    background: #8fbc00;
+    background: #c8e8a0;
     border-radius: 12px;
-    height: 310px;
+    height: 300px;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0;
   }
 
   /* CRT scanlines */
@@ -70,61 +61,40 @@
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 2px,
-      rgba(0,0,0,0.06) 2px,
-      rgba(0,0,0,0.06) 3px
+      0deg, transparent 0px, transparent 2px,
+      rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 3px
     );
     pointer-events: none;
     z-index: 5;
     border-radius: 12px;
   }
 
-  /* slight vignette */
-  .screen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.25) 100%);
-    pointer-events: none;
-    z-index: 4;
-    border-radius: 12px;
-  }
-
-  /* ── Top bar: name + age + mood ── */
+  /* ── Top bar ── */
   .top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px 10px 4px;
-    background: #6a9a00;
+    padding: 7px 12px 6px;
+    background: #a8cc70;
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
   }
 
   .pet-name {
-    font-size: 7px;
-    color: #1a2e00;
-    letter-spacing: 1px;
-  }
-
-  .top-center {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 8px;
+    color: #2a4a00;
   }
 
   .age-badge {
     font-size: 6px;
-    color: #1a2e00;
-    background: #5a8800;
-    padding: 2px 6px;
+    color: #2a4a00;
+    background: #90b858;
+    padding: 2px 7px;
     border-radius: 4px;
   }
 
   .mood-emoji {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1;
   }
 
@@ -132,69 +102,56 @@
   .stats {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 8px 10px 6px;
-    background: #7aab00;
+    gap: 4px;
+    padding: 8px 12px 6px;
+    background: #b8d888;
     flex-shrink: 0;
   }
 
   .stat-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
 
   .stat-icon {
-    font-size: 11px;
-    width: 16px;
+    font-size: 14px;
+    width: 18px;
     text-align: center;
     flex-shrink: 0;
+    line-height: 1;
   }
 
   .bar-track {
     flex: 1;
-    height: 7px;
-    background: #4a7200;
+    height: 8px;
+    background: #7aa040;
     border-radius: 4px;
     overflow: hidden;
-    position: relative;
   }
 
   .bar-fill {
     height: 100%;
     border-radius: 4px;
-    background: #1a3a00;
+    background: #2a4a00;
     transition: width 0.5s cubic-bezier(.4,0,.2,1);
-    position: relative;
-  }
-
-  /* shimmer on bars */
-  .bar-fill::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 40%;
-    height: 50%;
-    background: rgba(255,255,255,0.15);
-    border-radius: 4px;
   }
 
   .bar-fill.low {
-    background: #7a0000;
-    animation: pulse-bar 1s ease infinite;
+    background: #cc2200;
+    animation: pulse-bar 0.9s ease infinite;
   }
-
-  .bar-fill.mid { background: #5a5a00; }
+  .bar-fill.mid { background: #886600; }
 
   @keyframes pulse-bar {
     0%,100% { opacity: 1; }
-    50% { opacity: 0.6; }
+    50% { opacity: 0.55; }
   }
 
   .stat-val {
-    font-size: 6px;
-    color: #1a3a00;
-    width: 20px;
+    font-size: 7px;
+    color: #2a4a00;
+    width: 22px;
     text-align: right;
     flex-shrink: 0;
   }
@@ -204,19 +161,19 @@
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 14px;
     position: relative;
     overflow: hidden;
   }
 
-  /* background ground line */
   .ground {
     position: absolute;
-    bottom: 18px;
-    left: 10%;
-    right: 10%;
-    height: 2px;
-    background: #6a9a00;
+    bottom: 10px;
+    left: 8%;
+    right: 8%;
+    height: 3px;
+    background: #90b858;
     border-radius: 2px;
   }
 
@@ -225,19 +182,19 @@
     image-rendering: crisp-edges;
     position: relative;
     z-index: 2;
-    /* 2× scale via CSS for a bigger cuter pet */
-    width: 160px;
-    height: 160px;
+    /* render at 3× for a big, clear pet */
+    width: 144px;
+    height: 144px;
   }
 
-  /* ── Message ticker ── */
+  /* ── Message ── */
   .message-box {
-    background: #3a5a00;
-    padding: 5px 10px;
+    background: #2a4a00;
+    padding: 6px 12px;
     font-size: 7px;
     color: #c8e860;
     text-align: center;
-    min-height: 22px;
+    min-height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,7 +208,7 @@
   /* ── Particles ── */
   .particle {
     position: absolute;
-    font-size: 20px;
+    font-size: 22px;
     pointer-events: none;
     animation: floatUp 1.4s ease forwards;
     z-index: 10;
@@ -259,16 +216,17 @@
 
   @keyframes floatUp {
     0%   { opacity: 1; transform: translateY(0) scale(0.8); }
-    60%  { opacity: 1; transform: translateY(-50px) scale(1.2); }
-    100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
+    60%  { opacity: 1; transform: translateY(-55px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-85px) scale(0.6); }
   }
 
-  /* ── Buttons area ── */
+  /* ── Buttons ── */
   .buttons {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 8px;
-    margin-top: 18px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
     padding: 0 4px;
   }
 
@@ -276,7 +234,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 7px;
   }
 
   .btn {
@@ -294,60 +252,48 @@
       0 6px 0 #0d0c1e,
       0 8px 16px #00000060,
       inset 0 1px 2px #ffffff18;
-    transition: all 0.08s ease;
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    position: relative;
     outline: none;
-  }
-
-  .btn::after {
-    content: '';
-    position: absolute;
-    inset: 3px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, rgba(255,255,255,0.1), transparent);
-    pointer-events: none;
+    flex-shrink: 0;
   }
 
   .btn:hover {
     background: linear-gradient(145deg, #3e3c62, #28264a);
     transform: translateY(-2px);
-    box-shadow:
-      0 8px 0 #0d0c1e,
-      0 10px 20px #00000070,
-      inset 0 1px 2px #ffffff18;
+    box-shadow: 0 8px 0 #0d0c1e, 0 10px 20px #00000070, inset 0 1px 2px #ffffff18;
   }
 
   .btn:active {
-    transform: translateY(4px);
-    box-shadow:
-      0 2px 0 #0d0c1e,
-      0 4px 8px #00000060,
-      inset 0 1px 2px #ffffff18;
+    transform: translateY(5px);
+    box-shadow: 0 1px 0 #0d0c1e, 0 2px 6px #00000060, inset 0 1px 2px #ffffff18;
   }
 
   .btn-label {
     font-size: 6px;
-    color: #6666aa;
+    color: #8888bb;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    /* ensure label is always below the button, never behind */
+    position: relative;
+    z-index: 1;
   }
 
   /* ── Brand ── */
   .device-label {
     text-align: center;
-    margin-top: 14px;
+    margin-top: 16px;
     font-size: 8px;
     color: #4a4870;
-    letter-spacing: 4px;
+    letter-spacing: 5px;
   }
 
-  /* ── Game over overlay ── */
+  /* ── Game over ── */
   .game-over {
     position: absolute;
     inset: 0;
-    background: rgba(10,20,0,0.88);
+    background: rgba(8,16,0,0.90);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -355,16 +301,15 @@
     gap: 10px;
     z-index: 20;
     border-radius: 12px;
-    backdrop-filter: blur(2px);
   }
 
-  .game-over .go-icon { font-size: 36px; }
-  .game-over .go-title { font-size: 9px; color: #c8e860; }
-  .game-over .go-sub   { font-size: 7px; color: #7aaa30; margin-top: 2px; }
+  .game-over .go-icon  { font-size: 38px; }
+  .game-over .go-title { font-size: 8px;  color: #c8e860; }
+  .game-over .go-sub   { font-size: 6px;  color: #7aaa30; }
 
   .restart-btn {
-    margin-top: 8px;
-    background: #3a5a00;
+    margin-top: 6px;
+    background: #2a4a00;
     border: 2px solid #c8e860;
     color: #c8e860;
     padding: 8px 18px;
@@ -375,8 +320,7 @@
     letter-spacing: 1px;
     transition: background 0.15s;
   }
-
-  .restart-btn:hover { background: #5a8a00; }
+  .restart-btn:hover { background: #4a7a00; }
 </style>
 </head>
 <body>
@@ -384,16 +328,12 @@
   <div class="screen-bezel">
     <div class="screen" id="screen">
 
-      <!-- Top bar -->
       <div class="top-bar">
         <span class="pet-name">MOCHI</span>
-        <div class="top-center">
-          <span class="age-badge" id="ageIndicator">AGE 0m</span>
-        </div>
+        <span class="age-badge" id="ageIndicator">AGE 0m</span>
         <span class="mood-emoji" id="moodIndicator">😊</span>
       </div>
 
-      <!-- Stats -->
       <div class="stats">
         <div class="stat-row">
           <span class="stat-icon">🍔</span>
@@ -417,19 +357,15 @@
         </div>
       </div>
 
-      <!-- Pet -->
       <div class="pet-area" id="petArea">
         <div class="ground"></div>
-        <canvas class="pet-canvas" id="petCanvas" width="80" height="80"></canvas>
+        <canvas class="pet-canvas" id="petCanvas" width="48" height="48"></canvas>
       </div>
 
-      <!-- Message -->
       <div class="message-box" id="messageBox">Hello! I'm Mochi~ Take care of me!</div>
+    </div>
+  </div>
 
-    </div><!-- /screen -->
-  </div><!-- /screen-bezel -->
-
-  <!-- Buttons -->
   <div class="buttons">
     <div class="btn-wrap">
       <button class="btn" id="btnFeed">🍎</button>
@@ -481,203 +417,193 @@ const ctx       = canvas.getContext('2d');
 const messages = {
   idle:     ['...', 'Looking at you~', 'La la la...', 'Feeling cozy!', '*yawns*'],
   hungry:   ["I'm hungry!", 'Feed me please!', 'My tummy hurts...', 'Food? Food?!'],
-  sad:      ["I'm lonely...", 'Pet me!', 'I need attention!', 'Don\'t ignore me~'],
+  sad:      ["I'm lonely...", 'Pet me!', "I need attention!", "Don't ignore me~"],
   tired:    ['Yawn...', 'So sleepy...', 'Need rest...', '*eyes drooping*'],
   sick:     ['Not feeling well...', 'I need care!', 'Ouch...'],
-  eating:   ['Yum yum!', 'Delicious!', 'So good!', 'Nom nom nom!', 'More please!'],
-  petting:  ['Purr~', 'So nice!', 'I love you!', '♥ ♥ ♥', '*happy wiggle*'],
-  playing:  ['Wheee!', 'This is fun!', 'Again! Again!', 'Yay!', 'Catch me!'],
+  eating:   ['Yum yum!', 'Delicious!', 'So good!', 'Nom nom nom!'],
+  petting:  ['Purr~', 'So nice!', 'I love you!', '♥ ♥ ♥'],
+  playing:  ['Wheee!', 'This is fun!', 'Again! Again!', 'Yay!'],
   sleeping: ['Zzz...', '...zzz...', 'Sweet dreams~'],
   wakeup:   ['Good morning!', 'I feel refreshed!', 'That was nice!'],
   dead:     ['...', 'Goodbye...'],
 };
-
-function rnd(key) {
-  const a = messages[key];
-  return a[Math.floor(Math.random() * a.length)];
-}
+function rnd(k) { const a = messages[k]; return a[Math.floor(Math.random()*a.length)]; }
 function showMsg(t) { msgBox.textContent = t; }
 
-// ─── Pixel pet (cuter cat/blob design) ───────────────────────────────────────
-// 80×80 canvas, each "pixel" = 8px (10 logical pixels wide)
-const S = 8;
+// ─── Pixel pet — 48×48 canvas, each cell = 4px, scaled 3× via CSS ─────────
+// Pet is drawn on a 48×48 logical pixel canvas.
+// CSS makes it 144×144 on screen (3× crisp scale).
+// Grid: 12×12 cells of 4px each.
 
-function px(x, y, c) {
-  ctx.fillStyle = c;
+const S = 4; // pixels per cell
+
+function cell(x, y, color) {
+  ctx.fillStyle = color;
   ctx.fillRect(x * S, y * S, S, S);
 }
 
-// Color palette
-const C = {
-  body:   '#3a2a5e',   // deep purple body
-  belly:  '#6a5a8e',   // lighter belly
-  face:   '#3a2a5e',
-  eye:    '#ffffff',
-  pupil:  '#1a0a3e',
+// Palette — kawaii pastel cat
+const P = {
+  body:   '#7c5cbf',  // lavender purple
+  tummy:  '#b89ee0',  // lighter belly
+  outline:'#3d2070',  // dark outline/shadow
+  eyeW:   '#ffffff',  // eye white
+  pupil:  '#3d2070',  // dark pupil
   shine:  '#ffffff',
-  cheek:  '#ff8fa0',   // pink cheeks
-  nose:   '#ff6688',
-  mouth:  '#3a2a5e',
-  ear_in: '#9a6aae',
-  outline:'#1a0a2e',
-  dead:   '#888',
-  deadEye:'#444',
-  zzz:    '#6a9a00',
+  cheek:  '#ffaabb',  // pink blush
+  nose:   '#ff7799',
+  earIn:  '#e080b0',  // inner ear pink
+  mouth:  '#3d2070',
+  dead:   '#999',
 };
 
 let frame = 0;
 
+// Kawaii cat: 10×9 grid, centered in 12×12 canvas (offset 1,1)
+// Shape drawn with explicit cell lists for full control.
 function drawPet() {
-  ctx.clearRect(0, 0, 80, 80);
+  ctx.clearRect(0, 0, 48, 48);
 
-  const s = state;
-  const alive = s.alive;
-  const sleeping = s.sleeping || s.animState === 'sleeping';
+  const s       = state;
+  const alive   = s.alive;
+  const sleep   = s.sleeping || s.animState === 'sleeping';
+  const eating  = s.animState === 'eating';
+  const petting = s.animState === 'petting';
+  const playing = s.animState === 'playing';
 
-  // Vertical bob
+  // Vertical bounce
   let dy = 0;
-  if (alive && !sleeping) {
-    if (s.animState === 'playing') {
-      dy = Math.round(Math.sin(frame * 0.25) * 1.5);
-    } else {
-      dy = Math.round(Math.sin(frame * 0.05) * 0.4); // gentle breathe
-    }
+  if (alive && !sleep) {
+    if (playing) dy = -Math.round(Math.abs(Math.sin(frame * 0.22)) * 1.5);
+    else         dy =  Math.round(Math.sin(frame * 0.055) * 0.35); // breathe
   }
+  dy = Math.round(dy); // keep it integer cells
 
-  const bc = alive ? C.body   : C.dead;
-  const bl = alive ? C.belly  : '#aaa';
-  const ec = alive ? C.eye    : C.deadEye;
-  const pc = alive ? C.pupil  : '#666';
+  const ox = 1, oy = 1 + dy; // top-left origin of the 10×9 shape
 
-  // ── Body: rounded 6×5 blob at (2, 3+dy) ──
-  const bx = 2, by = 3 + dy;
+  const bc = alive ? P.body    : P.dead;
+  const tc = alive ? P.tummy   : '#bbb';
 
-  // Body pixels (relative to bx, by)
-  const bodyShape = [
-    [1,0],[2,0],[3,0],[4,0],
-    [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],
-    [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],
-    [0,3],[1,3],[2,3],[3,3],[4,3],[5,3],
-    [1,4],[2,4],[3,4],[4,4],
-  ];
-  bodyShape.forEach(([x,y]) => px(bx+x, by+y, bc));
-
-  // Belly highlight
-  [[2,2],[3,2],[2,3],[3,3]].forEach(([x,y]) => px(bx+x, by+y, bl));
-
-  // ── Ears (at top of body) ──
-  px(bx+0, by-1, bc);
-  px(bx+1, by-1, bc);
-  px(bx+4, by-1, bc);
-  px(bx+5, by-1, bc);
-  // inner ear color
+  // ── Ears (pointy cat ears at top) ──────────────────────────────────────────
+  // Left ear: col 1-2, row 0
+  cell(ox+1, oy+0, bc); cell(ox+2, oy+0, bc);
+  // Right ear: col 7-8
+  cell(ox+7, oy+0, bc); cell(ox+8, oy+0, bc);
+  // Ear tips (row -1 above body)
+  cell(ox+1, oy-1, bc);
+  cell(ox+8, oy-1, bc);
+  // Inner ear
   if (alive) {
-    px(bx+0, by-1, C.ear_in);
-    px(bx+5, by-1, C.ear_in);
+    cell(ox+1, oy+0, P.earIn);
+    cell(ox+8, oy+0, P.earIn);
   }
 
-  // ── Tail ──
-  const tailWag = (alive && (s.animState === 'petting' || s.animState === 'playing'))
-    ? Math.round(Math.sin(frame * 0.35) * 1)
-    : 0;
-  px(bx+6, by+2+tailWag, bc);
-  px(bx+7, by+1+tailWag, bc);
-  px(bx+7, by+tailWag, bc);
+  // ── Head (rows 0-3, cols 0-9, rounded) ─────────────────────────────────────
+  // row 0: cols 2-7
+  for (let x=2; x<=7; x++) cell(ox+x, oy+0, bc);
+  // row 1: cols 0-9
+  for (let x=0; x<=9; x++) cell(ox+x, oy+1, bc);
+  // row 2: cols 0-9
+  for (let x=0; x<=9; x++) cell(ox+x, oy+2, bc);
+  // row 3: cols 0-9
+  for (let x=0; x<=9; x++) cell(ox+x, oy+3, bc);
+  // row 4: cols 0-9 (body top)
+  for (let x=0; x<=9; x++) cell(ox+x, oy+4, bc);
 
-  // ── Legs ──
-  const walk = (alive && s.animState === 'playing')
-    ? Math.round(Math.sin(frame * 0.4))
-    : 0;
-  px(bx+1, by+5, bc);
-  px(bx+4, by+5, bc);
-  if (s.animState === 'playing') {
-    px(bx+1, by+5-walk, bc);
-    px(bx+4, by+5+walk, bc);
+  // ── Body (rows 4-7) ─────────────────────────────────────────────────────────
+  // rows 5-6: slightly narrower
+  for (let y=5; y<=6; y++) for (let x=0; x<=9; x++) cell(ox+x, oy+y, bc);
+  // row 7: taper bottom
+  for (let x=1; x<=8; x++) cell(ox+x, oy+7, bc);
+
+  // Tummy highlight (rows 3-6, cols 3-6)
+  if (alive) {
+    for (let y=3; y<=6; y++) for (let x=3; x<=6; x++) cell(ox+x, oy+y, tc);
   }
 
-  // ── Eyes ──
+  // ── Legs ───────────────────────────────────────────────────────────────────
+  const legBob = playing ? Math.round(Math.sin(frame * 0.3)) : 0;
+  // left leg
+  cell(ox+1, oy+8, bc); cell(ox+2, oy+8-legBob, bc);
+  // right leg
+  cell(ox+7, oy+8, bc); cell(ox+8, oy+8+legBob, bc);
+
+  // ── Tail ───────────────────────────────────────────────────────────────────
+  const tailWag = (alive && (petting || playing))
+    ? Math.round(Math.sin(frame * 0.3) * 1.5)
+    : 0;
+  cell(ox+10, oy+5+tailWag, bc);
+  cell(ox+10, oy+4+tailWag, bc);
+  cell(ox+9,  oy+3+tailWag, bc); // already covered by body but ensures tail tip
+
+  // ── Eyes ───────────────────────────────────────────────────────────────────
+  // Left eye center: (ox+2, oy+2), Right eye center: (ox+7, oy+2)
   if (!alive) {
-    // X eyes
-    px(bx+1, by+1, ec); px(bx+2, by+2, ec);
-    px(bx+2, by+1, ec); px(bx+1, by+2, ec);
-    px(bx+3, by+1, ec); px(bx+4, by+2, ec);
-    px(bx+4, by+1, ec); px(bx+3, by+2, ec);
-  } else if (sleeping) {
-    // Closed arcs (3 pixels each)
-    px(bx+1, by+2, C.cheek);
-    px(bx+2, by+1, C.cheek);
-    px(bx+3, by+2, C.cheek);
-    px(bx+4, by+1, C.cheek);
-    // "—" lids
-    px(bx+1, by+2, bc); px(bx+2, by+2, bc);
-    px(bx+3, by+2, bc); px(bx+4, by+2, bc);
+    // × eyes
+    cell(ox+2, oy+2, '#666'); cell(ox+3, oy+3, '#666');
+    cell(ox+3, oy+2, '#666'); cell(ox+2, oy+3, '#666');
+    cell(ox+6, oy+2, '#666'); cell(ox+7, oy+3, '#666');
+    cell(ox+7, oy+2, '#666'); cell(ox+6, oy+3, '#666');
+  } else if (sleep) {
+    // Closed eyes — two horizontal dashes
+    cell(ox+2, oy+2, P.outline); cell(ox+3, oy+2, P.outline);
+    cell(ox+6, oy+2, P.outline); cell(ox+7, oy+2, P.outline);
   } else {
-    const blink = frame % 100 > 96;
+    const blink = frame % 110 > 106;
     if (blink) {
-      // blink: flat line
-      px(bx+1, by+2, ec);
-      px(bx+2, by+2, ec);
-      px(bx+4, by+2, ec);
-      px(bx+3, by+2, ec);
+      cell(ox+2, oy+2, P.outline); cell(ox+3, oy+2, P.outline);
+      cell(ox+6, oy+2, P.outline); cell(ox+7, oy+2, P.outline);
     } else {
-      // Normal round eyes: 2×2 white + pupil
-      px(bx+1, by+1, ec); px(bx+2, by+1, ec);
-      px(bx+1, by+2, ec); px(bx+2, by+2, ec);
-      px(bx+3, by+1, ec); px(bx+4, by+1, ec);
-      px(bx+3, by+2, ec); px(bx+4, by+2, ec);
-      // pupils (shift with anim)
-      const px_shift = (s.animState === 'eating') ? 1 : 0;
-      px(bx+2+px_shift, by+2, pc);
-      px(bx+4+px_shift, by+2, pc);
-      // eye shine
-      px(bx+1, by+1, C.shine);
-      px(bx+3, by+1, C.shine);
+      // Left eye: 2×2 white at (ox+2, oy+2)
+      cell(ox+2, oy+2, P.eyeW); cell(ox+3, oy+2, P.eyeW);
+      cell(ox+2, oy+3, P.eyeW); cell(ox+3, oy+3, P.eyeW);
+      // Right eye: 2×2 white at (ox+6, oy+2)
+      cell(ox+6, oy+2, P.eyeW); cell(ox+7, oy+2, P.eyeW);
+      cell(ox+6, oy+3, P.eyeW); cell(ox+7, oy+3, P.eyeW);
+
+      // Pupils (bottom-right of each eye white)
+      cell(ox+3, oy+3, P.pupil);
+      cell(ox+7, oy+3, P.pupil);
+      // Shine (top-left)
+      cell(ox+2, oy+2, P.shine);
+      cell(ox+6, oy+2, P.shine);
     }
   }
 
-  // ── Cheeks ──
+  // ── Blush cheeks ───────────────────────────────────────────────────────────
   if (alive) {
-    px(bx+0, by+3, C.cheek);
-    px(bx+5, by+3, C.cheek);
+    cell(ox+1, oy+3, P.cheek);
+    cell(ox+8, oy+3, P.cheek);
   }
 
-  // ── Nose ──
-  if (alive) px(bx+2, by+3, C.nose);
+  // ── Nose ───────────────────────────────────────────────────────────────────
+  if (alive) cell(ox+4, oy+3, P.nose);
 
-  // ── Mouth ──
+  // ── Mouth ──────────────────────────────────────────────────────────────────
   if (!alive) {
-    px(bx+2, by+4, ec); px(bx+3, by+4, ec);
-  } else if (s.animState === 'eating' || s.animState === 'petting' || s.happy > 60) {
-    // Happy curved mouth
-    px(bx+1, by+4, bc);
-    px(bx+2, by+3, bc);
-    px(bx+3, by+3, bc);
-    px(bx+4, by+4, bc);
+    cell(ox+3, oy+4, '#666'); cell(ox+4, oy+4, '#666'); cell(ox+5, oy+4, '#666');
+  } else if (eating || petting || s.happy > 65) {
+    // Happy: ∪ shape
+    cell(ox+3, oy+4, P.mouth);
+    cell(ox+6, oy+4, P.mouth);
+    cell(ox+4, oy+5, P.mouth); cell(ox+5, oy+5, P.mouth);
   } else if (s.hunger < 30 || s.happy < 30) {
-    // Sad mouth
-    px(bx+1, by+3, bc);
-    px(bx+2, by+4, bc);
-    px(bx+3, by+4, bc);
-    px(bx+4, by+3, bc);
+    // Sad: ∩ shape
+    cell(ox+3, oy+5, P.mouth);
+    cell(ox+6, oy+5, P.mouth);
+    cell(ox+4, oy+4, P.mouth); cell(ox+5, oy+4, P.mouth);
   } else {
-    // Neutral
-    px(bx+2, by+4, bc);
-    px(bx+3, by+4, bc);
+    // Neutral: — line
+    cell(ox+4, oy+4, P.mouth); cell(ox+5, oy+4, P.mouth);
   }
 
-  // ── ZZZ when sleeping ──
-  if (sleeping && alive) {
-    ctx.fillStyle = C.zzz;
-    ctx.font = 'bold 7px monospace';
-    ctx.fillText('z', 62, 22 + dy * S);
-    ctx.fillText('Z', 66, 14 + dy * S);
-    ctx.fillText('Z', 70, 6  + dy * S);
-  }
-
-  // ── Stars/hearts when playing/petting ──
-  if (alive && s.animState === 'playing' && frame % 20 < 4) {
-    ctx.fillStyle = C.cheek;
-    ctx.fillText('★', 58, 28);
+  // ── ZZZ ────────────────────────────────────────────────────────────────────
+  if (sleep && alive) {
+    ctx.fillStyle = '#4a7a00';
+    ctx.font = 'bold 5px monospace';
+    ctx.fillText('z',  38, 14);
+    ctx.fillText('Z',  41,  9);
+    ctx.fillText('Z',  44,  5);
   }
 
   frame++;
@@ -685,29 +611,20 @@ function drawPet() {
 
 // ─── UI update ────────────────────────────────────────────────────────────────
 function clamp(v) { return Math.max(0, Math.min(100, v)); }
-
-function barClass(v) {
-  if (v < 25) return 'low';
-  if (v < 50) return 'mid';
-  return '';
-}
+function barCls(v) { return v < 25 ? 'bar-fill low' : v < 50 ? 'bar-fill mid' : 'bar-fill'; }
 
 function updateUI() {
   const s = state;
-  const vals = [
-    [hungerBar, hungerVal, s.hunger],
-    [happyBar,  happyVal,  s.happy],
-    [energyBar, energyVal, s.energy],
-    [healthBar, healthVal, s.health],
-  ];
-  vals.forEach(([bar, val, v]) => {
+  [[hungerBar, hungerVal, s.hunger],
+   [happyBar,  happyVal,  s.happy],
+   [energyBar, energyVal, s.energy],
+   [healthBar, healthVal, s.health]].forEach(([bar, val, v]) => {
     bar.style.width = clamp(v) + '%';
     val.textContent = Math.round(clamp(v));
-    bar.className = 'bar-fill ' + barClass(v);
+    bar.className = barCls(v);
   });
 
-  const mins = Math.floor(s.age / 60);
-  ageEl.textContent = `AGE ${mins}m`;
+  ageEl.textContent = `AGE ${Math.floor(s.age / 60)}m`;
 
   if (!s.alive)           moodEl.textContent = '💀';
   else if (s.sleeping)    moodEl.textContent = '😴';
@@ -726,14 +643,14 @@ function spawnParticle(emoji, count = 1) {
     el.className = 'particle';
     el.textContent = emoji;
     el.style.left   = (15 + Math.random() * 70) + '%';
-    el.style.bottom = (25 + Math.random() * 20) + '%';
-    el.style.animationDelay = (i * 120) + 'ms';
+    el.style.bottom = (30 + Math.random() * 20) + '%';
+    el.style.animationDelay = (i * 130) + 'ms';
     petArea.appendChild(el);
-    setTimeout(() => el.remove(), 1600);
+    setTimeout(() => el.remove(), 1700);
   }
 }
 
-// ─── Tick (every 5s) ─────────────────────────────────────────────────────────
+// ─── Game tick (every 5s) ─────────────────────────────────────────────────────
 function gameTick() {
   if (!state.alive) return;
   state.age += 5;
@@ -748,110 +665,71 @@ function gameTick() {
     state.energy = Math.max(0, state.energy - 2);
   }
 
-  const criticals = [state.hunger, state.happy, state.energy].filter(v => v < 20).length;
-  if (criticals > 0) {
-    state.health = Math.max(0, state.health - criticals * 3);
-  } else {
-    state.health = Math.min(MAX, state.health + 1);
-  }
+  const crits = [state.hunger, state.happy, state.energy].filter(v => v < 20).length;
+  state.health = crits > 0
+    ? Math.max(0, state.health - crits * 3)
+    : Math.min(MAX, state.health + 1);
 
   if (state.health <= 0) { die(); return; }
 
   if (state.animState === 'idle') {
-    if      (state.hunger < 25)       showMsg(rnd('hungry'));
-    else if (state.happy  < 25)       showMsg(rnd('sad'));
-    else if (state.energy < 25)       showMsg(rnd('tired'));
-    else if (state.health < 50)       showMsg(rnd('sick'));
-    else if (Math.random() < 0.35)    showMsg(rnd('idle'));
+    if      (state.hunger < 25)     showMsg(rnd('hungry'));
+    else if (state.happy  < 25)     showMsg(rnd('sad'));
+    else if (state.energy < 25)     showMsg(rnd('tired'));
+    else if (state.health < 50)     showMsg(rnd('sick'));
+    else if (Math.random() < 0.35)  showMsg(rnd('idle'));
   }
 
   updateUI();
 }
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
-function doAction(anim, duration, statFn, emoji, msgKey, particleCount = 1) {
+function doAction(anim, ms, fn, emoji, msgKey, n = 1) {
   if (!state.alive) return;
-  if (state.sleeping) {
-    showMsg("Shh! I'm sleeping...");
-    return;
-  }
+  if (state.sleeping) { showMsg("Shh! I'm sleeping..."); return; }
   state.animState = anim;
-  statFn();
-  spawnParticle(emoji, particleCount);
+  fn();
+  spawnParticle(emoji, n);
   showMsg(rnd(msgKey));
   updateUI();
-
   clearTimeout(state.animTimer);
-  state.animTimer = setTimeout(() => {
-    state.animState = 'idle';
-    updateUI();
-  }, duration);
+  state.animTimer = setTimeout(() => { state.animState = 'idle'; updateUI(); }, ms);
 }
 
-function feed() {
-  doAction('eating', 1600,
-    () => { state.hunger = Math.min(MAX, state.hunger + 25); state.energy = Math.min(MAX, state.energy + 5); },
-    '🍎', 'eating', 2);
-}
-
-function pet() {
-  doAction('petting', 1400,
-    () => { state.happy = Math.min(MAX, state.happy + 20); state.health = Math.min(MAX, state.health + 5); },
-    '💕', 'petting', 3);
-}
-
-function play() {
+function feed()  { doAction('eating',  1600, () => { state.hunger = Math.min(MAX, state.hunger+25); state.energy = Math.min(MAX, state.energy+5); },  '🍎', 'eating',  2); }
+function pet()   { doAction('petting', 1400, () => { state.happy  = Math.min(MAX, state.happy +20); state.health = Math.min(MAX, state.health+5); },  '💕', 'petting', 3); }
+function play()  {
   if (state.energy < 15) { showMsg('Too tired to play...'); return; }
-  doAction('playing', 2200,
-    () => { state.happy = Math.min(MAX, state.happy + 25); state.energy = Math.max(0, state.energy - 20); state.hunger = Math.max(0, state.hunger - 10); },
-    '🎉', 'playing', 2);
+  doAction('playing', 2200, () => { state.happy = Math.min(MAX, state.happy+25); state.energy = Math.max(0, state.energy-20); state.hunger = Math.max(0, state.hunger-10); }, '🎉', 'playing', 2);
 }
-
 function sleep() {
   if (!state.alive) return;
   if (state.sleeping) { wakeUp(); return; }
-  state.sleeping  = true;
-  state.animState = 'sleeping';
-  showMsg(rnd('sleeping'));
-  updateUI();
+  state.sleeping = true; state.animState = 'sleeping';
+  showMsg(rnd('sleeping')); updateUI();
 }
-
 function wakeUp() {
-  state.sleeping  = false;
-  state.animState = 'idle';
-  showMsg(rnd('wakeup'));
-  updateUI();
+  state.sleeping = false; state.animState = 'idle';
+  showMsg(rnd('wakeup')); updateUI();
 }
-
 function die() {
-  state.alive     = false;
-  state.animState = 'dead';
-  showMsg(rnd('dead'));
-  updateUI();
-
+  state.alive = false; state.animState = 'dead';
+  showMsg(rnd('dead')); updateUI();
   const ov = document.createElement('div');
   ov.className = 'game-over';
-  ov.innerHTML = `
-    <div class="go-icon">💀</div>
-    <div class="go-title">MOCHI PASSED AWAY</div>
-    <div class="go-sub">Lived for ${Math.floor(state.age / 60)} minutes</div>
-    <button class="restart-btn" id="restartBtn">TRY AGAIN</button>
-  `;
+  ov.innerHTML = `<div class="go-icon">💀</div><div class="go-title">MOCHI PASSED AWAY</div><div class="go-sub">Lived for ${Math.floor(state.age/60)} minutes</div><button class="restart-btn" id="restartBtn">TRY AGAIN</button>`;
   document.getElementById('screen').appendChild(ov);
   document.getElementById('restartBtn').addEventListener('click', restart);
 }
-
 function restart() {
   document.querySelectorAll('.game-over').forEach(e => e.remove());
-  state = { hunger: 80, happy: 80, energy: 80, health: 80, age: 0, alive: true, sleeping: false, animState: 'idle', animTimer: 0 };
-  showMsg("I'm back! Take care of me~");
-  updateUI();
+  state = { hunger:80, happy:80, energy:80, health:80, age:0, alive:true, sleeping:false, animState:'idle', animTimer:0 };
+  showMsg("I'm back! Take care of me~"); updateUI();
 }
 
-// ─── Render ───────────────────────────────────────────────────────────────────
+// ─── Loop ─────────────────────────────────────────────────────────────────────
 function loop() { drawPet(); requestAnimationFrame(loop); }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
 document.getElementById('btnFeed').addEventListener('click', feed);
 document.getElementById('btnPet').addEventListener('click',  pet);
 document.getElementById('btnPlay').addEventListener('click', play);
