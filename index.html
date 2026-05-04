@@ -74,29 +74,101 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 7px 12px 6px;
+    padding: 7px 10px 6px;
     background: #a8cc70;
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
+    gap: 6px;
   }
 
   .pet-name {
     font-size: 8px;
     color: #2a4a00;
+    cursor: pointer;
+    border-bottom: 1px dashed #4a7a00;
+    flex-shrink: 0;
   }
+  .pet-name:hover { color: #1a3000; }
 
   .age-badge {
     font-size: 6px;
     color: #2a4a00;
     background: #90b858;
-    padding: 2px 7px;
+    padding: 2px 6px;
     border-radius: 4px;
+    flex-shrink: 0;
   }
 
-  .mood-emoji {
-    font-size: 16px;
-    line-height: 1;
+  .top-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
   }
+
+  .mood-emoji { font-size: 16px; line-height: 1; }
+
+  .mute-btn {
+    background: #7aaa40;
+    border: none;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .mute-btn:hover { background: #5a8a20; }
+  .mute-btn.muted { background: #cc4400; }
+  .mute-btn.muted:hover { background: #aa2200; }
+
+  /* ── Rename modal ── */
+  .rename-modal {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(10,20,0,0.88);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 30;
+    border-radius: 12px;
+  }
+  .rename-modal.open { display: flex; }
+  .rename-modal label { font-size: 7px; color: #c8e860; }
+  .rename-modal input {
+    background: #1a3000;
+    border: 2px solid #c8e860;
+    color: #c8e860;
+    font-family: inherit;
+    font-size: 9px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+    width: 160px;
+    outline: none;
+    text-transform: uppercase;
+  }
+  .rename-modal input::placeholder { color: #4a7a30; }
+  .rename-row { display: flex; gap: 8px; }
+  .rename-ok, .rename-cancel {
+    background: #2a4a00;
+    border: 2px solid #c8e860;
+    color: #c8e860;
+    font-family: inherit;
+    font-size: 7px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .rename-ok:hover    { background: #4a7a00; }
+  .rename-cancel:hover { background: #4a2a00; border-color: #ff8860; color: #ff8860; }
 
   /* ── Stats panel ── */
   .stats {
@@ -108,11 +180,7 @@
     flex-shrink: 0;
   }
 
-  .stat-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .stat-row { display: flex; align-items: center; gap: 8px; }
 
   .stat-icon {
     font-size: 14px;
@@ -136,7 +204,6 @@
     background: #2a4a00;
     transition: width 0.5s cubic-bezier(.4,0,.2,1);
   }
-
   .bar-fill.low {
     background: #cc2200;
     animation: pulse-bar 0.9s ease infinite;
@@ -170,8 +237,7 @@
   .ground {
     position: absolute;
     bottom: 10px;
-    left: 8%;
-    right: 8%;
+    left: 8%; right: 8%;
     height: 3px;
     background: #90b858;
     border-radius: 2px;
@@ -182,7 +248,6 @@
     image-rendering: crisp-edges;
     position: relative;
     z-index: 2;
-    /* render at 3× for a big, clear pet */
     width: 144px;
     height: 144px;
   }
@@ -213,7 +278,6 @@
     animation: floatUp 1.4s ease forwards;
     z-index: 10;
   }
-
   @keyframes floatUp {
     0%   { opacity: 1; transform: translateY(0) scale(0.8); }
     60%  { opacity: 1; transform: translateY(-55px) scale(1.2); }
@@ -248,23 +312,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow:
-      0 6px 0 #0d0c1e,
-      0 8px 16px #00000060,
-      inset 0 1px 2px #ffffff18;
+    box-shadow: 0 6px 0 #0d0c1e, 0 8px 16px #00000060, inset 0 1px 2px #ffffff18;
     transition: transform 0.08s ease, box-shadow 0.08s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
     flex-shrink: 0;
   }
-
   .btn:hover {
     background: linear-gradient(145deg, #3e3c62, #28264a);
     transform: translateY(-2px);
     box-shadow: 0 8px 0 #0d0c1e, 0 10px 20px #00000070, inset 0 1px 2px #ffffff18;
   }
-
   .btn:active {
     transform: translateY(5px);
     box-shadow: 0 1px 0 #0d0c1e, 0 2px 6px #00000060, inset 0 1px 2px #ffffff18;
@@ -275,7 +334,6 @@
     color: #8888bb;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    /* ensure label is always below the button, never behind */
     position: relative;
     z-index: 1;
   }
@@ -302,10 +360,9 @@
     z-index: 20;
     border-radius: 12px;
   }
-
   .game-over .go-icon  { font-size: 38px; }
-  .game-over .go-title { font-size: 8px;  color: #c8e860; }
-  .game-over .go-sub   { font-size: 6px;  color: #7aaa30; }
+  .game-over .go-title { font-size: 8px; color: #c8e860; }
+  .game-over .go-sub   { font-size: 6px; color: #7aaa30; }
 
   .restart-btn {
     margin-top: 6px;
@@ -328,10 +385,23 @@
   <div class="screen-bezel">
     <div class="screen" id="screen">
 
+      <!-- Rename modal (inside screen) -->
+      <div class="rename-modal" id="renameModal">
+        <label>RENAME YOUR PET</label>
+        <input type="text" id="renameInput" maxlength="10" placeholder="NEW NAME" />
+        <div class="rename-row">
+          <button class="rename-ok"     id="renameOk">OK</button>
+          <button class="rename-cancel" id="renameCancel">CANCEL</button>
+        </div>
+      </div>
+
       <div class="top-bar">
-        <span class="pet-name">MOCHI</span>
+        <span class="pet-name" id="petNameEl" title="Click to rename">MOCHI</span>
         <span class="age-badge" id="ageIndicator">AGE 0m</span>
-        <span class="mood-emoji" id="moodIndicator">😊</span>
+        <div class="top-right">
+          <span class="mood-emoji" id="moodIndicator">😊</span>
+          <button class="mute-btn" id="muteBtn" title="Toggle sound">🔊</button>
+        </div>
       </div>
 
       <div class="stats">
@@ -389,7 +459,25 @@
 </div>
 
 <script>
-// ─── State ────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// PREFERENCES  (localStorage)
+// ═══════════════════════════════════════════════════════════════
+const PREFS_KEY = 'cutepet_prefs';
+
+function loadPrefs() {
+  try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch { return {}; }
+}
+function savePrefs(obj) {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(obj)); } catch {}
+}
+
+const prefs = loadPrefs();
+let petName  = prefs.petName  || 'MOCHI';
+let isMuted  = prefs.muted    || false;
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
 const MAX = 100;
 let state = {
   hunger: 80, happy: 80, energy: 80, health: 80,
@@ -397,23 +485,169 @@ let state = {
   animState: 'idle', animTimer: 0,
 };
 
-// ─── DOM ──────────────────────────────────────────────────────────────────────
-const hungerBar = document.getElementById('hungerBar');
-const happyBar  = document.getElementById('happyBar');
-const energyBar = document.getElementById('energyBar');
-const healthBar = document.getElementById('healthBar');
-const hungerVal = document.getElementById('hungerVal');
-const happyVal  = document.getElementById('happyVal');
-const energyVal = document.getElementById('energyVal');
-const healthVal = document.getElementById('healthVal');
-const msgBox    = document.getElementById('messageBox');
-const moodEl    = document.getElementById('moodIndicator');
-const ageEl     = document.getElementById('ageIndicator');
-const petArea   = document.getElementById('petArea');
-const canvas    = document.getElementById('petCanvas');
-const ctx       = canvas.getContext('2d');
+// ═══════════════════════════════════════════════════════════════
+// DOM
+// ═══════════════════════════════════════════════════════════════
+const hungerBar  = document.getElementById('hungerBar');
+const happyBar   = document.getElementById('happyBar');
+const energyBar  = document.getElementById('energyBar');
+const healthBar  = document.getElementById('healthBar');
+const hungerVal  = document.getElementById('hungerVal');
+const happyVal   = document.getElementById('happyVal');
+const energyVal  = document.getElementById('energyVal');
+const healthVal  = document.getElementById('healthVal');
+const msgBox     = document.getElementById('messageBox');
+const moodEl     = document.getElementById('moodIndicator');
+const ageEl      = document.getElementById('ageIndicator');
+const petArea    = document.getElementById('petArea');
+const canvas     = document.getElementById('petCanvas');
+const ctx        = canvas.getContext('2d');
+const petNameEl  = document.getElementById('petNameEl');
+const muteBtn    = document.getElementById('muteBtn');
+const renameModal= document.getElementById('renameModal');
+const renameInput= document.getElementById('renameInput');
 
-// ─── Messages ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// 8-BIT SOUND ENGINE
+// ═══════════════════════════════════════════════════════════════
+let audioCtx = null;
+
+function getAC() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // Resume if suspended (browser autoplay policy)
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+/**
+ * Play a single tone.
+ * @param {number} freq      Hz
+ * @param {number} duration  seconds
+ * @param {string} type      oscillator type
+ * @param {number} vol       peak gain (0-1)
+ * @param {number} start     offset from now (seconds)
+ * @returns {OscillatorNode} so caller can stop it early
+ */
+function beep(freq, duration, type = 'square', vol = 0.15, start = 0) {
+  if (isMuted) return null;
+  const ac   = getAC();
+  const osc  = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.connect(gain);
+  gain.connect(ac.destination);
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, ac.currentTime + start);
+  gain.gain.setValueAtTime(0, ac.currentTime + start);
+  gain.gain.linearRampToValueAtTime(vol, ac.currentTime + start + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + start + duration);
+  osc.start(ac.currentTime + start);
+  osc.stop(ac.currentTime + start + duration + 0.02);
+  return osc;
+}
+
+/** Play an array of [freq, duration] notes sequentially. */
+function seq(notes, type = 'square', vol = 0.15) {
+  if (isMuted) return;
+  let t = 0;
+  notes.forEach(([f, d]) => { if (f > 0) beep(f, d, type, vol, t); t += d; });
+}
+
+// ── Looping ambient sounds ──────────────────────────────────────
+// Each ambient track is a handle that can be cancelled.
+let ambientHandle = null;
+
+function stopAmbient() {
+  if (ambientHandle) { clearTimeout(ambientHandle); ambientHandle = null; }
+}
+
+/**
+ * Schedule a repeating pattern while a condition remains true.
+ * patternFn is called each cycle; returns the total duration (ms) of that cycle.
+ */
+function loopAmbient(conditionFn, patternFn) {
+  stopAmbient();
+  function tick() {
+    if (!conditionFn() || isMuted) { ambientHandle = null; return; }
+    const ms = patternFn();
+    ambientHandle = setTimeout(tick, ms);
+  }
+  tick();
+}
+
+// Sleeping: soft repeating low note every ~3s
+function startSleepAmbient() {
+  loopAmbient(
+    () => state.sleeping && state.alive,
+    () => {
+      seq([[220, 0.3], [0, 0.1], [196, 0.4]], 'triangle', 0.08);
+      return 3200;
+    }
+  );
+}
+
+// Eating: quick "munch" pattern repeated a few times
+function playEatingAmbient() {
+  stopAmbient();
+  let count = 0;
+  function tick() {
+    if (state.animState !== 'eating' || count >= 4) { ambientHandle = null; return; }
+    seq([[440, 0.05], [0, 0.03], [523, 0.05], [0, 0.03], [440, 0.07]], 'square', 0.10);
+    count++;
+    ambientHandle = setTimeout(tick, 500);
+  }
+  tick();
+}
+
+// Petting: purring — a warm trill repeated softly
+function playPettingAmbient() {
+  stopAmbient();
+  let count = 0;
+  function tick() {
+    if (state.animState !== 'petting' || count >= 5) { ambientHandle = null; return; }
+    // Rapid alternation = purr trill
+    seq([
+      [330, 0.04], [350, 0.04], [330, 0.04], [350, 0.04],
+      [330, 0.04], [350, 0.04],
+    ], 'triangle', 0.09);
+    count++;
+    ambientHandle = setTimeout(tick, 400);
+  }
+  tick();
+}
+
+// Playing: bouncy repeated tune
+function playPlayingAmbient() {
+  stopAmbient();
+  let count = 0;
+  function tick() {
+    if (state.animState !== 'playing' || count >= 3) { ambientHandle = null; return; }
+    seq([
+      [523, 0.06], [659, 0.06], [784, 0.06], [0, 0.05],
+      [659, 0.06], [784, 0.06], [1047, 0.10],
+    ], 'square', 0.11);
+    count++;
+    ambientHandle = setTimeout(tick, 700);
+  }
+  tick();
+}
+
+// ── One-shot SFX ───────────────────────────────────────────────
+function sfxFeed()    { seq([[330,0.07],[0,0.02],[440,0.07],[0,0.02],[523,0.10],[659,0.12]], 'square', 0.15); }
+function sfxPet()     { seq([[523,0.08],[659,0.08],[784,0.08],[1047,0.14]], 'triangle', 0.16); }
+function sfxPlay()    { seq([[523,0.06],[659,0.06],[784,0.06],[1047,0.06],[784,0.06],[659,0.06],[523,0.10]], 'square', 0.14); }
+function sfxSleep()   { seq([[440,0.14],[0,0.04],[349,0.14],[0,0.04],[294,0.20],[0,0.06],[220,0.28]], 'triangle', 0.13); }
+function sfxWakeUp()  { seq([[330,0.07],[440,0.07],[523,0.07],[659,0.14]], 'square', 0.15); }
+function sfxDie()     { seq([[440,0.12],[415,0.12],[392,0.12],[370,0.12],[349,0.12],[294,0.20],[220,0.35]], 'sawtooth', 0.12); }
+function sfxRestart() { seq([[523,0.08],[659,0.08],[784,0.08],[1047,0.16]], 'square', 0.16); }
+function sfxError()   { seq([[150,0.08],[0,0.03],[130,0.12]], 'sawtooth', 0.14); }
+function sfxAlert()   { seq([[880,0.06],[0,0.04],[880,0.06]], 'square', 0.12); }
+function sfxRename()  { seq([[659,0.06],[784,0.06],[1047,0.10]], 'triangle', 0.14); }
+function sfxMute()    { seq([[220,0.08],[0,0.02],[110,0.10]], 'square', 0.10); }
+function sfxUnmute()  { seq([[440,0.06],[523,0.08]], 'square', 0.12); }
+
+// ═══════════════════════════════════════════════════════════════
+// MESSAGES
+// ═══════════════════════════════════════════════════════════════
 const messages = {
   idle:     ['...', 'Looking at you~', 'La la la...', 'Feeling cozy!', '*yawns*'],
   hungry:   ["I'm hungry!", 'Feed me please!', 'My tummy hurts...', 'Food? Food?!'],
@@ -428,190 +662,148 @@ const messages = {
   dead:     ['...', 'Goodbye...'],
 };
 function rnd(k) { const a = messages[k]; return a[Math.floor(Math.random()*a.length)]; }
-function showMsg(t) { msgBox.textContent = t; }
+function showMsg(t)  { msgBox.textContent = t; }
 
-// ─── Pixel pet — 48×48 canvas, each cell = 4px, scaled 3× via CSS ─────────
-// Pet is drawn on a 48×48 logical pixel canvas.
-// CSS makes it 144×144 on screen (3× crisp scale).
-// Grid: 12×12 cells of 4px each.
-
-const S = 4; // pixels per cell
-
+// ═══════════════════════════════════════════════════════════════
+// PIXEL PET DRAWING
+// ═══════════════════════════════════════════════════════════════
+const S = 4;
 function cell(x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x * S, y * S, S, S);
 }
 
-// Palette — kawaii pastel cat
 const P = {
-  body:   '#7c5cbf',  // lavender purple
-  tummy:  '#b89ee0',  // lighter belly
-  outline:'#3d2070',  // dark outline/shadow
-  eyeW:   '#ffffff',  // eye white
-  pupil:  '#3d2070',  // dark pupil
-  shine:  '#ffffff',
-  cheek:  '#ffaabb',  // pink blush
-  nose:   '#ff7799',
-  earIn:  '#e080b0',  // inner ear pink
-  mouth:  '#3d2070',
-  dead:   '#999',
+  body:   '#7c5cbf', tummy:  '#b89ee0', outline:'#3d2070',
+  eyeW:   '#ffffff', pupil:  '#3d2070', shine:  '#ffffff',
+  cheek:  '#ffaabb', nose:   '#ff7799', earIn:  '#e080b0',
+  mouth:  '#3d2070', dead:   '#999',
 };
 
 let frame = 0;
 
-// Kawaii cat: 10×9 grid, centered in 12×12 canvas (offset 1,1)
-// Shape drawn with explicit cell lists for full control.
 function drawPet() {
   ctx.clearRect(0, 0, 48, 48);
-
-  const s       = state;
+  const s = state;
   const alive   = s.alive;
   const sleep   = s.sleeping || s.animState === 'sleeping';
   const eating  = s.animState === 'eating';
   const petting = s.animState === 'petting';
   const playing = s.animState === 'playing';
 
-  // Vertical bounce
   let dy = 0;
   if (alive && !sleep) {
     if (playing) dy = -Math.round(Math.abs(Math.sin(frame * 0.22)) * 1.5);
-    else         dy =  Math.round(Math.sin(frame * 0.055) * 0.35); // breathe
+    else         dy =  Math.round(Math.sin(frame * 0.055) * 0.35);
   }
-  dy = Math.round(dy); // keep it integer cells
+  dy = Math.round(dy);
 
-  const ox = 1, oy = 1 + dy; // top-left origin of the 10×9 shape
+  const ox = 1, oy = 1 + dy;
+  const bc = alive ? P.body  : P.dead;
+  const tc = alive ? P.tummy : '#bbb';
 
-  const bc = alive ? P.body    : P.dead;
-  const tc = alive ? P.tummy   : '#bbb';
-
-  // ── Ears (pointy cat ears at top) ──────────────────────────────────────────
-  // Left ear: col 1-2, row 0
+  // Ears
   cell(ox+1, oy+0, bc); cell(ox+2, oy+0, bc);
-  // Right ear: col 7-8
   cell(ox+7, oy+0, bc); cell(ox+8, oy+0, bc);
-  // Ear tips (row -1 above body)
-  cell(ox+1, oy-1, bc);
-  cell(ox+8, oy-1, bc);
-  // Inner ear
-  if (alive) {
-    cell(ox+1, oy+0, P.earIn);
-    cell(ox+8, oy+0, P.earIn);
-  }
+  cell(ox+1, oy-1, bc); cell(ox+8, oy-1, bc);
+  if (alive) { cell(ox+1, oy+0, P.earIn); cell(ox+8, oy+0, P.earIn); }
 
-  // ── Head (rows 0-3, cols 0-9, rounded) ─────────────────────────────────────
-  // row 0: cols 2-7
+  // Head rows 0-4
   for (let x=2; x<=7; x++) cell(ox+x, oy+0, bc);
-  // row 1: cols 0-9
-  for (let x=0; x<=9; x++) cell(ox+x, oy+1, bc);
-  // row 2: cols 0-9
-  for (let x=0; x<=9; x++) cell(ox+x, oy+2, bc);
-  // row 3: cols 0-9
-  for (let x=0; x<=9; x++) cell(ox+x, oy+3, bc);
-  // row 4: cols 0-9 (body top)
-  for (let x=0; x<=9; x++) cell(ox+x, oy+4, bc);
+  for (let r=1; r<=4; r++) for (let x=0; x<=9; x++) cell(ox+x, oy+r, bc);
 
-  // ── Body (rows 4-7) ─────────────────────────────────────────────────────────
-  // rows 5-6: slightly narrower
+  // Body rows 5-7
   for (let y=5; y<=6; y++) for (let x=0; x<=9; x++) cell(ox+x, oy+y, bc);
-  // row 7: taper bottom
   for (let x=1; x<=8; x++) cell(ox+x, oy+7, bc);
 
-  // Tummy highlight (rows 3-6, cols 3-6)
-  if (alive) {
-    for (let y=3; y<=6; y++) for (let x=3; x<=6; x++) cell(ox+x, oy+y, tc);
-  }
+  // Tummy
+  if (alive) for (let y=3; y<=6; y++) for (let x=3; x<=6; x++) cell(ox+x, oy+y, tc);
 
-  // ── Legs ───────────────────────────────────────────────────────────────────
+  // Legs
   const legBob = playing ? Math.round(Math.sin(frame * 0.3)) : 0;
-  // left leg
   cell(ox+1, oy+8, bc); cell(ox+2, oy+8-legBob, bc);
-  // right leg
   cell(ox+7, oy+8, bc); cell(ox+8, oy+8+legBob, bc);
 
-  // ── Tail ───────────────────────────────────────────────────────────────────
-  const tailWag = (alive && (petting || playing))
-    ? Math.round(Math.sin(frame * 0.3) * 1.5)
-    : 0;
+  // Tail
+  const tailWag = (alive && (petting || playing)) ? Math.round(Math.sin(frame * 0.3) * 1.5) : 0;
   cell(ox+10, oy+5+tailWag, bc);
   cell(ox+10, oy+4+tailWag, bc);
-  cell(ox+9,  oy+3+tailWag, bc); // already covered by body but ensures tail tip
+  cell(ox+9,  oy+3+tailWag, bc);
 
-  // ── Eyes ───────────────────────────────────────────────────────────────────
-  // Left eye center: (ox+2, oy+2), Right eye center: (ox+7, oy+2)
+  // Eyes
   if (!alive) {
-    // × eyes
-    cell(ox+2, oy+2, '#666'); cell(ox+3, oy+3, '#666');
-    cell(ox+3, oy+2, '#666'); cell(ox+2, oy+3, '#666');
-    cell(ox+6, oy+2, '#666'); cell(ox+7, oy+3, '#666');
-    cell(ox+7, oy+2, '#666'); cell(ox+6, oy+3, '#666');
+    cell(ox+2,oy+2,'#666'); cell(ox+3,oy+3,'#666');
+    cell(ox+3,oy+2,'#666'); cell(ox+2,oy+3,'#666');
+    cell(ox+6,oy+2,'#666'); cell(ox+7,oy+3,'#666');
+    cell(ox+7,oy+2,'#666'); cell(ox+6,oy+3,'#666');
   } else if (sleep) {
-    // Closed eyes — two horizontal dashes
-    cell(ox+2, oy+2, P.outline); cell(ox+3, oy+2, P.outline);
-    cell(ox+6, oy+2, P.outline); cell(ox+7, oy+2, P.outline);
+    cell(ox+2,oy+2,P.outline); cell(ox+3,oy+2,P.outline);
+    cell(ox+6,oy+2,P.outline); cell(ox+7,oy+2,P.outline);
   } else {
     const blink = frame % 110 > 106;
     if (blink) {
-      cell(ox+2, oy+2, P.outline); cell(ox+3, oy+2, P.outline);
-      cell(ox+6, oy+2, P.outline); cell(ox+7, oy+2, P.outline);
+      cell(ox+2,oy+2,P.outline); cell(ox+3,oy+2,P.outline);
+      cell(ox+6,oy+2,P.outline); cell(ox+7,oy+2,P.outline);
     } else {
-      // Left eye: 2×2 white at (ox+2, oy+2)
-      cell(ox+2, oy+2, P.eyeW); cell(ox+3, oy+2, P.eyeW);
-      cell(ox+2, oy+3, P.eyeW); cell(ox+3, oy+3, P.eyeW);
-      // Right eye: 2×2 white at (ox+6, oy+2)
-      cell(ox+6, oy+2, P.eyeW); cell(ox+7, oy+2, P.eyeW);
-      cell(ox+6, oy+3, P.eyeW); cell(ox+7, oy+3, P.eyeW);
-
-      // Pupils (bottom-right of each eye white)
-      cell(ox+3, oy+3, P.pupil);
-      cell(ox+7, oy+3, P.pupil);
-      // Shine (top-left)
-      cell(ox+2, oy+2, P.shine);
-      cell(ox+6, oy+2, P.shine);
+      cell(ox+2,oy+2,P.eyeW); cell(ox+3,oy+2,P.eyeW);
+      cell(ox+2,oy+3,P.eyeW); cell(ox+3,oy+3,P.eyeW);
+      cell(ox+6,oy+2,P.eyeW); cell(ox+7,oy+2,P.eyeW);
+      cell(ox+6,oy+3,P.eyeW); cell(ox+7,oy+3,P.eyeW);
+      cell(ox+3,oy+3,P.pupil); cell(ox+7,oy+3,P.pupil);
+      cell(ox+2,oy+2,P.shine); cell(ox+6,oy+2,P.shine);
     }
   }
 
-  // ── Blush cheeks ───────────────────────────────────────────────────────────
+  // Cheeks + nose
   if (alive) {
-    cell(ox+1, oy+3, P.cheek);
-    cell(ox+8, oy+3, P.cheek);
+    cell(ox+1,oy+3,P.cheek); cell(ox+8,oy+3,P.cheek);
+    cell(ox+4,oy+3,P.nose);
   }
 
-  // ── Nose ───────────────────────────────────────────────────────────────────
-  if (alive) cell(ox+4, oy+3, P.nose);
-
-  // ── Mouth ──────────────────────────────────────────────────────────────────
+  // Mouth
   if (!alive) {
-    cell(ox+3, oy+4, '#666'); cell(ox+4, oy+4, '#666'); cell(ox+5, oy+4, '#666');
+    cell(ox+3,oy+4,'#666'); cell(ox+4,oy+4,'#666'); cell(ox+5,oy+4,'#666');
   } else if (eating || petting || s.happy > 65) {
-    // Happy: ∪ shape
-    cell(ox+3, oy+4, P.mouth);
-    cell(ox+6, oy+4, P.mouth);
-    cell(ox+4, oy+5, P.mouth); cell(ox+5, oy+5, P.mouth);
+    cell(ox+3,oy+4,P.mouth); cell(ox+6,oy+4,P.mouth);
+    cell(ox+4,oy+5,P.mouth); cell(ox+5,oy+5,P.mouth);
   } else if (s.hunger < 30 || s.happy < 30) {
-    // Sad: ∩ shape
-    cell(ox+3, oy+5, P.mouth);
-    cell(ox+6, oy+5, P.mouth);
-    cell(ox+4, oy+4, P.mouth); cell(ox+5, oy+4, P.mouth);
+    cell(ox+3,oy+5,P.mouth); cell(ox+6,oy+5,P.mouth);
+    cell(ox+4,oy+4,P.mouth); cell(ox+5,oy+4,P.mouth);
   } else {
-    // Neutral: — line
-    cell(ox+4, oy+4, P.mouth); cell(ox+5, oy+4, P.mouth);
+    cell(ox+4,oy+4,P.mouth); cell(ox+5,oy+4,P.mouth);
   }
 
-  // ── ZZZ ────────────────────────────────────────────────────────────────────
+  // ZZZ
   if (sleep && alive) {
     ctx.fillStyle = '#4a7a00';
     ctx.font = 'bold 5px monospace';
-    ctx.fillText('z',  38, 14);
-    ctx.fillText('Z',  41,  9);
-    ctx.fillText('Z',  44,  5);
+    ctx.fillText('z', 38, 14);
+    ctx.fillText('Z', 41,  9);
+    ctx.fillText('Z', 44,  5);
   }
 
   frame++;
 }
 
-// ─── UI update ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// UI UPDATE
+// ═══════════════════════════════════════════════════════════════
 function clamp(v) { return Math.max(0, Math.min(100, v)); }
 function barCls(v) { return v < 25 ? 'bar-fill low' : v < 50 ? 'bar-fill mid' : 'bar-fill'; }
+
+function applyPetName() {
+  petNameEl.textContent = petName;
+  // Update death overlay if visible
+  const t = document.querySelector('.go-title');
+  if (t) t.textContent = `${petName} PASSED AWAY`;
+  // Update welcome message
+  document.title = `CutePet – ${petName}`;
+}
+
+function updateMuteBtn() {
+  muteBtn.textContent = isMuted ? '🔇' : '🔊';
+  muteBtn.classList.toggle('muted', isMuted);
+}
 
 function updateUI() {
   const s = state;
@@ -623,9 +815,7 @@ function updateUI() {
     val.textContent = Math.round(clamp(v));
     bar.className = barCls(v);
   });
-
   ageEl.textContent = `AGE ${Math.floor(s.age / 60)}m`;
-
   if (!s.alive)           moodEl.textContent = '💀';
   else if (s.sleeping)    moodEl.textContent = '😴';
   else if (s.health < 25) moodEl.textContent = '🤒';
@@ -636,7 +826,9 @@ function updateUI() {
   else                     moodEl.textContent = '😊';
 }
 
-// ─── Particles ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// PARTICLES
+// ═══════════════════════════════════════════════════════════════
 function spawnParticle(emoji, count = 1) {
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
@@ -650,7 +842,11 @@ function spawnParticle(emoji, count = 1) {
   }
 }
 
-// ─── Game tick (every 5s) ─────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// GAME TICK
+// ═══════════════════════════════════════════════════════════════
+let lastAlertTick = -999;
+
 function gameTick() {
   if (!state.alive) return;
   state.age += 5;
@@ -672,212 +868,179 @@ function gameTick() {
 
   if (state.health <= 0) { die(); return; }
 
+  // Critical alert beep (at most once per 15s)
+  const anyCrit = [state.hunger, state.happy, state.energy, state.health].some(v => v < 20);
+  if (anyCrit && state.alive && !state.sleeping && state.age - lastAlertTick > 15) {
+    lastAlertTick = state.age;
+    sfxAlert();
+  }
+
   if (state.animState === 'idle') {
-    if      (state.hunger < 25)     showMsg(rnd('hungry'));
-    else if (state.happy  < 25)     showMsg(rnd('sad'));
-    else if (state.energy < 25)     showMsg(rnd('tired'));
-    else if (state.health < 50)     showMsg(rnd('sick'));
-    else if (Math.random() < 0.35)  showMsg(rnd('idle'));
+    if      (state.hunger < 25)    showMsg(rnd('hungry'));
+    else if (state.happy  < 25)    showMsg(rnd('sad'));
+    else if (state.energy < 25)    showMsg(rnd('tired'));
+    else if (state.health < 50)    showMsg(rnd('sick'));
+    else if (Math.random() < 0.35) showMsg(rnd('idle'));
   }
 
   updateUI();
 }
 
-// ─── Actions ──────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════════
 function doAction(anim, ms, fn, emoji, msgKey, n = 1) {
   if (!state.alive) return;
   if (state.sleeping) { showMsg("Shh! I'm sleeping..."); return; }
+  stopAmbient();
   state.animState = anim;
   fn();
   spawnParticle(emoji, n);
   showMsg(rnd(msgKey));
   updateUI();
   clearTimeout(state.animTimer);
-  state.animTimer = setTimeout(() => { state.animState = 'idle'; updateUI(); }, ms);
+  state.animTimer = setTimeout(() => {
+    state.animState = 'idle';
+    stopAmbient();
+    updateUI();
+  }, ms);
 }
 
-function feed()  { doAction('eating',  1600, () => { state.hunger = Math.min(MAX, state.hunger+25); state.energy = Math.min(MAX, state.energy+5); },  '🍎', 'eating',  2); }
-function pet()   { doAction('petting', 1400, () => { state.happy  = Math.min(MAX, state.happy +20); state.health = Math.min(MAX, state.health+5); },  '💕', 'petting', 3); }
-function play()  {
-  if (state.energy < 15) { showMsg('Too tired to play...'); return; }
-  doAction('playing', 2200, () => { state.happy = Math.min(MAX, state.happy+25); state.energy = Math.max(0, state.energy-20); state.hunger = Math.max(0, state.hunger-10); }, '🎉', 'playing', 2);
+function feed() {
+  sfxFeed();
+  doAction('eating', 1800,
+    () => { state.hunger = Math.min(MAX, state.hunger+25); state.energy = Math.min(MAX, state.energy+5); },
+    '🍎', 'eating', 2);
+  playEatingAmbient();
 }
+
+function pet() {
+  sfxPet();
+  doAction('petting', 1600,
+    () => { state.happy = Math.min(MAX, state.happy+20); state.health = Math.min(MAX, state.health+5); },
+    '💕', 'petting', 3);
+  playPettingAmbient();
+}
+
+function play() {
+  if (state.energy < 15) { sfxError(); showMsg('Too tired to play...'); return; }
+  sfxPlay();
+  doAction('playing', 2400,
+    () => { state.happy = Math.min(MAX, state.happy+25); state.energy = Math.max(0, state.energy-20); state.hunger = Math.max(0, state.hunger-10); },
+    '🎉', 'playing', 2);
+  playPlayingAmbient();
+}
+
 function sleep() {
   if (!state.alive) return;
   if (state.sleeping) { wakeUp(); return; }
-  state.sleeping = true; state.animState = 'sleeping';
-  showMsg(rnd('sleeping')); updateUI();
+  sfxSleep();
+  stopAmbient();
+  state.sleeping = true;
+  state.animState = 'sleeping';
+  showMsg(rnd('sleeping'));
+  updateUI();
+  startSleepAmbient();
 }
+
 function wakeUp() {
-  state.sleeping = false; state.animState = 'idle';
-  showMsg(rnd('wakeup')); updateUI();
+  sfxWakeUp();
+  stopAmbient();
+  state.sleeping  = false;
+  state.animState = 'idle';
+  showMsg(rnd('wakeup'));
+  updateUI();
 }
-function die() {
-  state.alive = false; state.animState = 'dead';
-  showMsg(rnd('dead')); updateUI();
-  const ov = document.createElement('div');
-  ov.className = 'game-over';
-  ov.innerHTML = `<div class="go-icon">💀</div><div class="go-title">MOCHI PASSED AWAY</div><div class="go-sub">Lived for ${Math.floor(state.age/60)} minutes</div><button class="restart-btn" id="restartBtn">TRY AGAIN</button>`;
-  document.getElementById('screen').appendChild(ov);
-  document.getElementById('restartBtn').addEventListener('click', restart);
-}
-function restart() {
-  document.querySelectorAll('.game-over').forEach(e => e.remove());
-  state = { hunger:80, happy:80, energy:80, health:80, age:0, alive:true, sleeping:false, animState:'idle', animTimer:0 };
-  showMsg("I'm back! Take care of me~"); updateUI();
-}
-
-// ─── 8-bit Sound Engine (Web Audio API) ──────────────────────────────────────
-let audioCtx = null;
-
-function getAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
-}
-
-// Low-level tone generator
-// type: 'square'|'sine'|'triangle'|'sawtooth'
-function beep(freq, duration, type = 'square', vol = 0.18, startTime = 0) {
-  const ac  = getAudioCtx();
-  const osc = ac.createOscillator();
-  const gain = ac.createGain();
-
-  osc.connect(gain);
-  gain.connect(ac.destination);
-
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq, ac.currentTime + startTime);
-
-  gain.gain.setValueAtTime(0, ac.currentTime + startTime);
-  gain.gain.linearRampToValueAtTime(vol, ac.currentTime + startTime + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + startTime + duration);
-
-  osc.start(ac.currentTime + startTime);
-  osc.stop(ac.currentTime + startTime + duration + 0.01);
-}
-
-// Play a sequence of [freq, duration] pairs, each offset in time
-function sequence(notes, type = 'square', vol = 0.18) {
-  let t = 0;
-  notes.forEach(([freq, dur]) => {
-    if (freq > 0) beep(freq, dur, type, vol, t);
-    t += dur;
-  });
-}
-
-// ── Sound effects ──
-
-function sfxFeed() {
-  // Rising "nom nom" — two quick ascending blips
-  sequence([
-    [330, 0.07], [0, 0.02], [440, 0.07], [0, 0.02],
-    [523, 0.10], [659, 0.12],
-  ], 'square', 0.15);
-}
-
-function sfxPet() {
-  // Warm soft ascending chime (triangle = softer)
-  sequence([
-    [523, 0.08], [659, 0.08], [784, 0.08], [1047, 0.14],
-  ], 'triangle', 0.16);
-}
-
-function sfxPlay() {
-  // Bouncy upbeat arpeggio
-  sequence([
-    [523, 0.06], [659, 0.06], [784, 0.06], [1047, 0.06],
-    [784, 0.06], [659, 0.06], [523, 0.10],
-  ], 'square', 0.14);
-}
-
-function sfxSleep() {
-  // Descending lullaby — slow drooping notes
-  sequence([
-    [440, 0.14], [0, 0.04], [349, 0.14], [0, 0.04],
-    [294, 0.20], [0, 0.06], [220, 0.28],
-  ], 'triangle', 0.13);
-}
-
-function sfxWakeUp() {
-  // Quick ascending fanfare
-  sequence([
-    [330, 0.07], [440, 0.07], [523, 0.07], [659, 0.14],
-  ], 'square', 0.15);
-}
-
-function sfxDie() {
-  // Descending "death" jingle
-  sequence([
-    [440, 0.12], [415, 0.12], [392, 0.12], [370, 0.12],
-    [349, 0.12], [294, 0.20], [220, 0.35],
-  ], 'sawtooth', 0.12);
-}
-
-function sfxRestart() {
-  // Cheerful 3-note start
-  sequence([
-    [523, 0.08], [659, 0.08], [784, 0.08], [1047, 0.16],
-  ], 'square', 0.16);
-}
-
-function sfxError() {
-  // Low buzz — too tired
-  sequence([
-    [150, 0.08], [0, 0.03], [130, 0.12],
-  ], 'sawtooth', 0.14);
-}
-
-function sfxAlert() {
-  // Urgent double beep for critical stats (called from tick)
-  sequence([
-    [880, 0.06], [0, 0.04], [880, 0.06],
-  ], 'square', 0.12);
-}
-
-// Track alert so it doesn't fire every tick
-let lastAlertTick = -999;
-
-// ─── Loop ─────────────────────────────────────────────────────────────────────
-function loop() { drawPet(); requestAnimationFrame(loop); }
-
-document.getElementById('btnFeed').addEventListener('click', () => { sfxFeed(); feed(); });
-document.getElementById('btnPet').addEventListener('click',  () => { sfxPet();  pet();  });
-document.getElementById('btnPlay').addEventListener('click', () => {
-  if (state.energy < 15) { sfxError(); }
-  sfxPlay(); play();
-});
-document.getElementById('btnSleep').addEventListener('click', () => {
-  if (state.sleeping) sfxWakeUp(); else sfxSleep();
-  sleep();
-});
-
-// Patch die/restart to include sounds
-const _die     = die;
-const _restart = restart;
 
 function die() {
   sfxDie();
-  _die();
+  stopAmbient();
+  state.alive     = false;
+  state.animState = 'dead';
+  showMsg(rnd('dead'));
+  updateUI();
+  const ov = document.createElement('div');
+  ov.className = 'game-over';
+  ov.innerHTML = `
+    <div class="go-icon">💀</div>
+    <div class="go-title">${petName} PASSED AWAY</div>
+    <div class="go-sub">Lived for ${Math.floor(state.age/60)} minutes</div>
+    <button class="restart-btn" id="restartBtn">TRY AGAIN</button>
+  `;
+  document.getElementById('screen').appendChild(ov);
+  document.getElementById('restartBtn').addEventListener('click', restart);
 }
 
 function restart() {
   sfxRestart();
-  _restart();
+  document.querySelectorAll('.game-over').forEach(e => e.remove());
+  state = { hunger:80, happy:80, energy:80, health:80, age:0, alive:true, sleeping:false, animState:'idle', animTimer:0 };
+  showMsg(`I'm back! Take care of me~`);
+  updateUI();
 }
 
-// Alert beep when any stat goes critical (at most once per 3 ticks)
-const _gameTick = gameTick;
-function gameTick() {
-  _gameTick();
-  const crit = [state.hunger, state.happy, state.energy, state.health].some(v => v < 20);
-  if (crit && state.alive && !state.sleeping && state.age - lastAlertTick > 15) {
-    lastAlertTick = state.age;
-    sfxAlert();
+// ═══════════════════════════════════════════════════════════════
+// MUTE TOGGLE
+// ═══════════════════════════════════════════════════════════════
+muteBtn.addEventListener('click', () => {
+  isMuted = !isMuted;
+  savePrefs({ petName, muted: isMuted });
+  updateMuteBtn();
+  if (isMuted) {
+    sfxMute();       // plays before mute takes full effect on next call
+    stopAmbient();
+  } else {
+    sfxUnmute();
+    // Resume ambient if pet is sleeping
+    if (state.sleeping) startSleepAmbient();
   }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// RENAME
+// ═══════════════════════════════════════════════════════════════
+petNameEl.addEventListener('click', () => {
+  renameInput.value = petName;
+  renameModal.classList.add('open');
+  renameInput.focus();
+  renameInput.select();
+});
+
+document.getElementById('renameOk').addEventListener('click', confirmRename);
+document.getElementById('renameCancel').addEventListener('click', () => renameModal.classList.remove('open'));
+
+renameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter')  confirmRename();
+  if (e.key === 'Escape') renameModal.classList.remove('open');
+});
+
+function confirmRename() {
+  const val = renameInput.value.trim().toUpperCase().slice(0, 10);
+  if (val.length === 0) return;
+  petName = val;
+  savePrefs({ petName, muted: isMuted });
+  applyPetName();
+  sfxRename();
+  showMsg(`My name is ${petName}~`);
+  renameModal.classList.remove('open');
 }
 
-setInterval(gameTick, 5000);
+// ═══════════════════════════════════════════════════════════════
+// RENDER LOOP + INIT
+// ═══════════════════════════════════════════════════════════════
+function loop() { drawPet(); requestAnimationFrame(loop); }
+
+document.getElementById('btnFeed').addEventListener('click', feed);
+document.getElementById('btnPet').addEventListener('click',  pet);
+document.getElementById('btnPlay').addEventListener('click', play);
+document.getElementById('btnSleep').addEventListener('click', sleep);
+
+// Boot
+applyPetName();
+updateMuteBtn();
 updateUI();
+showMsg(`Hello! I'm ${petName}~ Take care of me!`);
+setInterval(gameTick, 5000);
 loop();
 </script>
 </body>
