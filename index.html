@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CutePet</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+  }
+
+  .device {
+    background: #2d2d44;
+    border-radius: 40px;
+    padding: 24px;
+    width: 340px;
+    box-shadow: 0 0 40px #0004, inset 0 2px 4px #ffffff22;
+    border: 3px solid #3d3d5c;
+    position: relative;
+  }
+
+  .screen {
+    background: #9bbc0f;
+    border-radius: 20px;
+    height: 280px;
+    border: 4px solid #1a1a2e;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  /* Pixel-style scanlines */
+  .screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.04) 3px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+  }
+
+  .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 1;
+  }
+
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #0f380f;
+    font-weight: bold;
+  }
+
+  .stat-label { width: 50px; }
+
+  .bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #306230;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: #0f380f;
+    transition: width 0.4s ease;
+  }
+
+  .bar-fill.low { background: #8b0000; }
+
+  .pet-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .pet-canvas {
+    image-rendering: pixelated;
+  }
+
+  .message-box {
+    background: #0f380f;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #9bbc0f;
+    text-align: center;
+    min-height: 20px;
+    z-index: 1;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .btn {
+    background: #1a1a2e;
+    border: 3px solid #3d3d5c;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    color: #9bbc0f;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn:hover { background: #2a2a4e; transform: scale(1.05); }
+  .btn:active { transform: scale(0.93); border-color: #9bbc0f; }
+
+  .device-label {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #6666aa;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .mood-indicator {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 16px;
+    z-index: 2;
+  }
+
+  .age-indicator {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    font-size: 10px;
+    color: #0f380f;
+    font-weight: bold;
+    z-index: 2;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .anim-bounce { animation: bounce 0.6s ease infinite; }
+  .anim-shake { animation: shake 0.3s ease; }
+  .anim-spin { animation: spin 0.5s linear; }
+
+  .particle {
+    position: absolute;
+    font-size: 18px;
+    pointer-events: none;
+    animation: floatUp 1.2s ease forwards;
+    z-index: 10;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-70px) scale(1.5); }
+  }
+
+  .game-over {
+    position: absolute;
+    inset: 0;
+    background: #0f380fcc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 20;
+    border-radius: 16px;
+  }
+
+  .game-over h2 { color: #9bbc0f; font-size: 22px; }
+  .game-over p  { color: #9bbc0f; font-size: 12px; }
+
+  .restart-btn {
+    margin-top: 10px;
+    background: #0f380f;
+    border: 2px solid #9bbc0f;
+    color: #9bbc0f;
+    padding: 6px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+  }
+
+  .restart-btn:hover { background: #306230; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="screen" id="screen">
+    <div class="age-indicator" id="ageIndicator">Age: 0</div>
+    <div class="mood-indicator" id="moodIndicator">😊</div>
+
+    <div class="stats">
+      <div class="stat-row">
+        <span class="stat-label">Hunger</span>
+        <div class="bar-bg"><div class="bar-fill" id="hungerBar" style="width:100%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Happy</span>
+        <div class="bar-bg"><div class="bar-fill" id="happyBar" style="width:100%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Energy</span>
+        <div class="bar-bg"><div class="bar-fill" id="energyBar" style="width:100%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Health</span>
+        <div class="bar-bg"><div class="bar-fill" id="healthBar" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <div class="pet-area" id="petArea">
+      <canvas class="pet-canvas" id="petCanvas" width="80" height="80"></canvas>
+    </div>
+
+    <div class="message-box" id="messageBox">Welcome! Take care of your pet!</div>
+  </div>
+
+  <div class="buttons">
+    <button class="btn" id="btnFeed" title="Feed">🍎</button>
+    <button class="btn" id="btnPet"  title="Pet">🤚</button>
+    <button class="btn" id="btnPlay" title="Play">🎮</button>
+    <button class="btn" id="btnSleep" title="Sleep">💤</button>
+  </div>
+
+  <div class="device-label">CutePet</div>
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+const MAX = 100;
+let state = {
+  hunger: 80,    // full = 100
+  happy:  80,
+  energy: 80,
+  health: 80,
+  age:    0,     // seconds alive
+  alive:  true,
+  sleeping: false,
+  animState: 'idle',  // idle | eating | petting | playing | sleeping
+  animTimer: 0,
+};
+
+// ─── DOM refs ─────────────────────────────────────────────────────────────────
+const hungerBar  = document.getElementById('hungerBar');
+const happyBar   = document.getElementById('happyBar');
+const energyBar  = document.getElementById('energyBar');
+const healthBar  = document.getElementById('healthBar');
+const msgBox     = document.getElementById('messageBox');
+const moodEl     = document.getElementById('moodIndicator');
+const ageEl      = document.getElementById('ageIndicator');
+const petArea    = document.getElementById('petArea');
+const canvas     = document.getElementById('petCanvas');
+const ctx        = canvas.getContext('2d');
+
+// ─── Messages ─────────────────────────────────────────────────────────────────
+const messages = {
+  idle:     ['...', 'Looking at you~', 'Feeling okay!', 'La la la...'],
+  hungry:   ['I\'m hungry!', 'Feed me please!', 'My tummy hurts...'],
+  sad:      ['I\'m lonely...', 'Pet me!', 'I want attention!'],
+  tired:    ['Yawn...', 'So sleepy...', 'Need rest...'],
+  sick:     ['Not feeling well...', 'I need care!'],
+  eating:   ['Yum yum!', 'Delicious!', 'So good!', 'Nom nom nom!'],
+  petting:  ['Purr~', 'So nice!', 'I love you!', '♥♥♥'],
+  playing:  ['Wheee!', 'This is fun!', 'Again! Again!', 'Yay!'],
+  sleeping: ['Zzz...', '...zzz...', 'Sweet dreams...'],
+  wakeup:   ['Good morning!', 'I feel refreshed!'],
+  dead:     ['...', 'Goodbye...'],
+};
+
+function randomMsg(key) {
+  const arr = messages[key];
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function showMsg(text) {
+  msgBox.textContent = text;
+}
+
+// ─── Pixel pet drawing ────────────────────────────────────────────────────────
+// Pet is drawn on an 80x80 canvas (pixel art, ~8x8 grid scaled x10)
+const SCALE = 10;
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, 80, 80);
+}
+
+// Draw pixel at grid coords
+function px(gx, gy, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(gx * SCALE, gy * SCALE, SCALE, SCALE);
+}
+
+const BODY_COLOR  = '#0f380f';
+const EYE_COLOR   = '#9bbc0f';
+const CHEEK_COLOR = '#306230';
+const DEAD_COLOR  = '#555';
+
+let animFrame = 0;
+
+function drawPet() {
+  clearCanvas();
+
+  const s  = state;
+  const bc = s.alive ? BODY_COLOR  : DEAD_COLOR;
+  const ec = s.alive ? EYE_COLOR   : '#888';
+  const cc = s.alive ? CHEEK_COLOR : '#777';
+
+  const bounce = (s.animState === 'playing' && s.alive)
+    ? Math.round(Math.sin(animFrame * 0.3) * 0.5)
+    : 0;
+
+  const baseY = 1 + bounce;
+
+  // Body (rounded square, 6x5 at grid 1,2)
+  [[1,0],[2,0],[3,0],[4,0],[5,0],
+   [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],
+   [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],
+   [0,3],[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],
+   [1,4],[2,4],[3,4],[4,4],[5,4],
+  ].forEach(([x,y]) => px(x, y + baseY, bc));
+
+  // Ears
+  px(1, baseY - 1, bc);
+  px(5, baseY - 1, bc);
+
+  // Eyes
+  if (s.sleeping || s.animState === 'sleeping') {
+    // Closed eyes (lines)
+    px(1, 2 + baseY, cc);
+    px(2, 2 + baseY, cc);
+    px(4, 2 + baseY, cc);
+    px(5, 2 + baseY, cc);
+  } else if (!s.alive) {
+    // X eyes
+    px(1, 2 + baseY, ec); px(2, 3 + baseY, ec);
+    px(2, 2 + baseY, ec); px(1, 3 + baseY, ec);
+    px(4, 2 + baseY, ec); px(5, 3 + baseY, ec);
+    px(5, 2 + baseY, ec); px(4, 3 + baseY, ec);
+  } else {
+    px(2, 2 + baseY, ec);
+    px(4, 2 + baseY, ec);
+    // Blink every ~3s
+    if (animFrame % 90 > 85) {
+      px(2, 2 + baseY, bc);
+      px(4, 2 + baseY, bc);
+    }
+  }
+
+  // Cheeks
+  px(1, 3 + baseY, cc);
+  px(5, 3 + baseY, cc);
+
+  // Mouth
+  if (!s.alive) {
+    px(3, 4 + baseY, ec);
+  } else if (s.animState === 'eating' || s.animState === 'petting') {
+    // Happy mouth
+    px(2, 4 + baseY, ec);
+    px(3, 4 + baseY, ec);
+    px(4, 4 + baseY, ec);
+  } else if (s.hunger < 30 || s.happy < 30) {
+    // Sad mouth
+    px(3, 4 + baseY, ec);
+  } else {
+    // Neutral
+    px(2, 4 + baseY, ec);
+    px(4, 4 + baseY, ec);
+  }
+
+  // Tail
+  const tailWag = (s.animState === 'petting' || s.animState === 'playing')
+    ? Math.round(Math.sin(animFrame * 0.4))
+    : 0;
+  px(6, 3 + baseY + tailWag, bc);
+  px(7, 2 + baseY + tailWag, bc);
+
+  // Legs (walking anim)
+  const walk = (s.animState === 'playing')
+    ? Math.round(Math.sin(animFrame * 0.5))
+    : 0;
+  px(2, 5 + baseY - walk, bc);
+  px(4, 5 + baseY + walk, bc);
+
+  // ZZZ if sleeping
+  if (s.sleeping || s.animState === 'sleeping') {
+    ctx.fillStyle = CHEEK_COLOR;
+    ctx.font = 'bold 10px monospace';
+    ctx.fillText('z', 60, 18);
+    ctx.fillText('Z', 65, 10);
+  }
+
+  animFrame++;
+}
+
+// ─── Stat UI update ───────────────────────────────────────────────────────────
+function pct(v) { return Math.max(0, Math.min(100, v)) + '%'; }
+
+function updateUI() {
+  const s = state;
+  hungerBar.style.width = pct(s.hunger);
+  happyBar.style.width  = pct(s.happy);
+  energyBar.style.width = pct(s.energy);
+  healthBar.style.width = pct(s.health);
+
+  hungerBar.classList.toggle('low', s.hunger < 25);
+  happyBar.classList.toggle('low',  s.happy  < 25);
+  energyBar.classList.toggle('low', s.energy < 25);
+  healthBar.classList.toggle('low', s.health < 25);
+
+  ageEl.textContent = `Age: ${Math.floor(s.age / 60)}m`;
+
+  // Mood emoji
+  if (!s.alive)           moodEl.textContent = '💀';
+  else if (s.sleeping)    moodEl.textContent = '😴';
+  else if (s.health < 25) moodEl.textContent = '🤒';
+  else if (s.hunger < 25) moodEl.textContent = '😫';
+  else if (s.happy  < 25) moodEl.textContent = '😢';
+  else if (s.energy < 25) moodEl.textContent = '😩';
+  else if (s.happy  > 75) moodEl.textContent = '😄';
+  else                     moodEl.textContent = '😊';
+}
+
+// ─── Particles ────────────────────────────────────────────────────────────────
+function spawnParticle(emoji) {
+  const el = document.createElement('div');
+  el.className = 'particle';
+  el.textContent = emoji;
+  el.style.left = (20 + Math.random() * 60) + '%';
+  el.style.bottom = '30%';
+  petArea.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+// ─── Decay loop (every 5 seconds real time = 1 game tick) ────────────────────
+let tickInterval;
+
+function gameTick() {
+  if (!state.alive) return;
+
+  state.age += 5;
+
+  if (state.sleeping) {
+    // Recover energy while sleeping
+    state.energy = Math.min(MAX, state.energy + 8);
+    state.hunger = Math.max(0, state.hunger - 2);
+    if (state.energy >= MAX) {
+      wakeUp();
+    }
+  } else {
+    state.hunger = Math.max(0, state.hunger - 3);
+    state.happy  = Math.max(0, state.happy  - 2);
+    state.energy = Math.max(0, state.energy - 2);
+  }
+
+  // Health degrades if other stats are critically low
+  const criticalCount = [state.hunger, state.happy, state.energy]
+    .filter(v => v < 20).length;
+  if (criticalCount > 0) {
+    state.health = Math.max(0, state.health - criticalCount * 3);
+  } else {
+    state.health = Math.min(MAX, state.health + 1);
+  }
+
+  // Death
+  if (state.health <= 0) {
+    die();
+    return;
+  }
+
+  // Idle messages
+  if (state.animState === 'idle') {
+    if (state.hunger < 25)      showMsg(randomMsg('hungry'));
+    else if (state.happy < 25)  showMsg(randomMsg('sad'));
+    else if (state.energy < 25) showMsg(randomMsg('tired'));
+    else if (state.health < 50) showMsg(randomMsg('sick'));
+    else if (Math.random() < 0.3) showMsg(randomMsg('idle'));
+  }
+
+  updateUI();
+}
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
+function doAction(anim, duration, statFn, particleEmoji, msgKey) {
+  if (!state.alive) return;
+  if (state.sleeping && anim !== 'wakeup') {
+    showMsg('Shh! I\'m sleeping...');
+    return;
+  }
+
+  state.animState = anim;
+  statFn();
+  spawnParticle(particleEmoji);
+  showMsg(randomMsg(msgKey));
+  updateUI();
+
+  clearTimeout(state.animTimer);
+  state.animTimer = setTimeout(() => {
+    state.animState = 'idle';
+    showMsg(randomMsg('idle'));
+    updateUI();
+  }, duration);
+}
+
+function feed() {
+  doAction('eating', 1500,
+    () => {
+      state.hunger = Math.min(MAX, state.hunger + 25);
+      state.energy = Math.min(MAX, state.energy + 5);
+    },
+    '🍎', 'eating'
+  );
+}
+
+function pet() {
+  doAction('petting', 1200,
+    () => {
+      state.happy  = Math.min(MAX, state.happy  + 20);
+      state.health = Math.min(MAX, state.health + 5);
+    },
+    '❤️', 'petting'
+  );
+}
+
+function play() {
+  if (state.energy < 15) {
+    showMsg('Too tired to play...');
+    return;
+  }
+  doAction('playing', 2000,
+    () => {
+      state.happy  = Math.min(MAX, state.happy  + 25);
+      state.energy = Math.max(0,   state.energy - 20);
+      state.hunger = Math.max(0,   state.hunger - 10);
+    },
+    '🎉', 'playing'
+  );
+}
+
+function sleep() {
+  if (!state.alive) return;
+  if (state.sleeping) {
+    wakeUp();
+    return;
+  }
+  state.sleeping  = true;
+  state.animState = 'sleeping';
+  showMsg(randomMsg('sleeping'));
+  updateUI();
+}
+
+function wakeUp() {
+  state.sleeping  = false;
+  state.animState = 'idle';
+  showMsg(randomMsg('wakeup'));
+  updateUI();
+}
+
+function die() {
+  state.alive = false;
+  state.animState = 'dead';
+  showMsg(randomMsg('dead'));
+  updateUI();
+
+  // Show game-over overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'game-over';
+  overlay.innerHTML = `
+    <h2>💀</h2>
+    <h2>Your pet passed away</h2>
+    <p>They lived for ${Math.floor(state.age / 60)} minutes</p>
+    <button class="restart-btn" id="restartBtn">Try Again</button>
+  `;
+  document.getElementById('screen').appendChild(overlay);
+  document.getElementById('restartBtn').addEventListener('click', restart);
+}
+
+function restart() {
+  // Remove overlay
+  document.querySelectorAll('.game-over').forEach(el => el.remove());
+  state = {
+    hunger: 80, happy: 80, energy: 80, health: 80,
+    age: 0, alive: true, sleeping: false,
+    animState: 'idle', animTimer: 0,
+  };
+  showMsg('Welcome back!');
+  updateUI();
+}
+
+// ─── Render loop ──────────────────────────────────────────────────────────────
+function renderLoop() {
+  drawPet();
+  requestAnimationFrame(renderLoop);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.getElementById('btnFeed').addEventListener('click', feed);
+document.getElementById('btnPet').addEventListener('click',  pet);
+document.getElementById('btnPlay').addEventListener('click', play);
+document.getElementById('btnSleep').addEventListener('click', sleep);
+
+tickInterval = setInterval(gameTick, 5000);
+updateUI();
+renderLoop();
+</script>
+</body>
+</html>
